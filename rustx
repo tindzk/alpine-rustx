@@ -1,0 +1,23 @@
+#!/bin/sh
+
+NU_VERSION=$(cat $(dirname $0)/.nu_version)
+
+if [ ! -f build/nu-$NU_VERSION ]; then
+	name=nu-$NU_VERSION-$(uname -m)-unknown-linux-musl
+
+	mkdir -p build/
+	cd build/
+
+	wget "https://github.com/nushell/nushell/releases/download/$NU_VERSION/$name.tar.gz"
+	tar -zxvf ${name}.tar.gz $name/nu
+	rm ${name}.tar.gz
+	mv $name/nu nu-$NU_VERSION
+	rmdir $name
+
+	cd -
+fi
+
+script="$(dirname "$0")/src/commands/$1.nu"
+shift
+
+exec build/nu-$NU_VERSION $script "$@"

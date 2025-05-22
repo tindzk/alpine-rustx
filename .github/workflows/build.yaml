@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-and-test:
+    name: Build and test toolchains
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
+
+      - name: Install Bubblewrap
+        run: |
+          sudo apt-get -y install bubblewrap
+
+          # See https://github.com/DevToys-app/DevToys/issues/1373
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
+      - name: Prepare configuration
+        run: |
+          mkdir work
+          cd work
+
+          # Linux target is excluded to shorten CI execution
+          cat <<EOF > config.nuon
+          {
+            rust_version: "1.87.0",
+            alpine_version: "3.21",
+            targets: [
+              "x86_64-pc-windows-gnu",
+              "aarch64-apple-darwin"
+            ]
+          }
+          EOF
+
+      - name: Build toolchains
+        run: cd work && ../rustx build config.nuon
+
+      - name: Build Docker image
+        run: cd work && docker build --tag rustx-test:latest -f build/Dockerfile .
+
+      - name: Test Ring for all targets
+        run: cd work && ../rustx test config.nuon rustx-test:latest

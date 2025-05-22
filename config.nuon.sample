@@ -1,0 +1,36 @@
+#
+# alpine-rustx configuration
+#
+
+{
+    rust_version: "1.87.0"
+    alpine_version: "3.21"
+    targets: [
+        "x86_64-unknown-linux-musl"
+        "aarch64-unknown-linux-musl"
+        #"x86_64-pc-windows-gnu"
+        #"i686-pc-windows-gnu"
+        #"aarch64-apple-darwin"
+        #"x86_64-apple-darwin"
+    ]
+
+    # Install additional Cargo components (default: [])
+    #
+    #components: ["clippy", "rustfmt"]
+
+    # Install nextest (default: false)
+    #
+    #nextest: true
+
+    # Run custom commands when building Docker image
+    #
+    #commands: [
+    #    "apk add --no-cache nodejs npm"
+    #]
+
+    # Isolation mechanism used for building toolchains
+    #
+    # Possible values: bubblewrap (default), docker
+    #
+    #isolation: "docker"
+}
