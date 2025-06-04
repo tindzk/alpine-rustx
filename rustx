@@ -3,7 +3,22 @@
 NU_VERSION=$(cat $(dirname $0)/.nu_version)
 
 if [ ! -f build/nu-$NU_VERSION ]; then
-	name=nu-$NU_VERSION-$(uname -m)-unknown-linux-musl
+	os=$(uname -s)
+	arch=$(uname -m)
+
+	case "$os" in
+		"Darwin")
+			[[ "$arch" == "arm64" ]] && arch="aarch64"
+			name="nu-${NU_VERSION}-${arch}-apple-darwin"
+			;;
+		"Linux")
+			name="nu-${NU_VERSION}-${arch}-unknown-linux-musl"
+			;;
+		*)
+			echo "Unsupported operating system: $os" >&2
+			exit 1
+			;;
+	esac
 
 	mkdir -p build/
 	cd build/
