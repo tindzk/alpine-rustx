@@ -4,8 +4,10 @@ export def run [spec: record] {
     if not ("rootfs" | path exists) {
         mkdir rootfs
 
+		let major_alpine_version = ($ALPINE_VERSION | split row '.' | take 2 | str join ".")
+
         let host_arch = (uname | get machine)
-        wget -O - $"https://dl-cdn.alpinelinux.org/alpine/latest-stable/releases/($host_arch)/alpine-minirootfs-($ALPINE_VERSION)-($host_arch).tar.gz" | tar -xz -C rootfs
+        wget -O - $"https://dl-cdn.alpinelinux.org/alpine/v($major_alpine_version)/releases/($host_arch)/alpine-minirootfs-($ALPINE_VERSION)-($host_arch).tar.gz" | tar -xz -C rootfs
     }
 
     let rw_bind = $spec.rw_bind | transpose name value | each {|it| ["--bind", $it.name, $it.value]} | flatten
