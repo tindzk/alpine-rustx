@@ -5,6 +5,12 @@ use ../config.nu
 
 def main [config_path: string] {
     let root_path = ($env.FILE_PWD | path join "../../")
+
+    mut host_arch = (uname | get machine)
+    if $host_arch == "arm64" {
+        $host_arch = "aarch64"
+    }
+
     let nu_version = (open ($root_path | path join ".nu_version") | str trim)
     let cfg = config normalise (open $config_path)
 
@@ -17,7 +23,7 @@ def main [config_path: string] {
             $"(pwd)/toolchains": "/toolchains"
         }
         ro_bind: {
-            $"(pwd)/build/nu-($nu_version)": "/bin/nu",
+            $"(pwd)/build/nu-($nu_version)-($host_arch)-unknown-linux-musl/nu": "/bin/nu",
             ($config_path | path expand): "/build/config.nuon",
             ($root_path | path join "src"): "/src"
         }

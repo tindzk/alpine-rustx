@@ -2,37 +2,48 @@
 
 NU_VERSION=$(cat $(dirname $0)/.nu_version)
 
-if [ ! -f build/nu-$NU_VERSION ]; then
-	os=$(uname -s)
-	arch=$(uname -m)
+os=$(uname -s)
+arch=$(uname -m)
 
-	case "$os" in
-		"Darwin")
-			[[ "$arch" == "arm64" ]] && arch="aarch64"
-			name="nu-${NU_VERSION}-${arch}-apple-darwin"
-			;;
-		"Linux")
-			name="nu-${NU_VERSION}-${arch}-unknown-linux-musl"
-			;;
-		*)
-			echo "Unsupported operating system: $os" >&2
-			exit 1
-			;;
-	esac
+case "$os" in
+	"Darwin")
+		[ "$arch" = "arm64" ] && arch="aarch64"
+		native_nu="nu-${NU_VERSION}-${arch}-apple-darwin"
+		;;
+	"Linux")
+		native_nu="nu-${NU_VERSION}-${arch}-unknown-linux-musl"
+		;;
+	*)
+		echo "Unsupported operating system: $os" >&2
+		exit 1
+		;;
+esac
+
+linux_nu="nu-${NU_VERSION}-${arch}-unknown-linux-musl"
+
+fetch_nu() {
+	name="$1"
 
 	mkdir -p build/
 	cd build/
 
 	wget "https://github.com/nushell/nushell/releases/download/$NU_VERSION/$name.tar.gz"
+
 	tar -zxvf ${name}.tar.gz $name/nu
 	rm ${name}.tar.gz
-	mv $name/nu nu-$NU_VERSION
-	rmdir $name
 
 	cd -
+}
+
+if [ ! -f build/$native_nu/nu ]; then
+	fetch_nu "$native_nu"
+fi
+
+if [ ! -f build/$linux_nu/nu ]; then
+	fetch_nu "$linux_nu"
 fi
 
 script="$(dirname "$0")/src/commands/$1.nu"
 shift
 
-exec build/nu-$NU_VERSION $script "$@"
+exec build/$native_nu/nu $script "$@"
