@@ -8,6 +8,7 @@ def main [config_path: string] {
 
     mut host_arch = (uname | get machine)
     if $host_arch == "arm64" {
+        # Needed if host system is macOS
         $host_arch = "aarch64"
     }
 
