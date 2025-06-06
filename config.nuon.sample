@@ -5,6 +5,8 @@
 {
     rust_version: "1.87.0"
     alpine_version: "3.21"
+
+    # Note: Linux targets currently only support the musl variant.
     targets: [
         "x86_64-unknown-linux-musl"
         "aarch64-unknown-linux-musl"
@@ -30,7 +32,12 @@
 
     # Isolation mechanism used for building toolchains
     #
+    # When building on macOS, set this to `docker` as `bubblewrap` is not available.
+    #
     # Possible values: bubblewrap (default), docker
+    #
+    # The Docker isolation creates a volume named alpine-rustx-build. It is reused
+    # across cache runs and can be removed.
     #
     #isolation: "docker"
 }

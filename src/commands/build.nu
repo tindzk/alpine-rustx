@@ -18,9 +18,8 @@ def main [config_path: string] {
     mkdir build
     mkdir toolchains
 
-    let spec = {
+    mut spec = {
         rw_bind: {
-            $"(pwd)/build": "/build",
             $"(pwd)/toolchains": "/toolchains"
         }
         ro_bind: {
@@ -32,6 +31,7 @@ def main [config_path: string] {
     }
 
     if $cfg.isolation == "bubblewrap" {
+        $spec.rw_bind = $spec.rw_bind | insert $"(pwd)/build" "/build"
         bubblewrap run $spec
     } else if $cfg.isolation == "docker" {
         docker run $spec

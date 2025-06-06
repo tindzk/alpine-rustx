@@ -31,7 +31,7 @@ The generated Docker image allows you to compile your Rust project for any of th
 
 ## Requirements
 - Docker
-- [Bubblewrap](https://github.com/containers/bubblewrap) (optional)
+- [Bubblewrap](https://github.com/containers/bubblewrap) (optional, Linux only)
 - A minimum of 15 GB free disk space is recommended
 
 ## Installation
