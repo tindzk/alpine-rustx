@@ -4,7 +4,7 @@ export def run [spec: record] {
     if not ("rootfs" | path exists) {
         mkdir rootfs
 
-		let major_alpine_version = ($ALPINE_VERSION | split row '.' | take 2 | str join ".")
+        let major_alpine_version = ($ALPINE_VERSION | split row '.' | take 2 | str join ".")
 
         let host_arch = (uname | get machine)
         wget -O - $"https://dl-cdn.alpinelinux.org/alpine/v($major_alpine_version)/releases/($host_arch)/alpine-minirootfs-($ALPINE_VERSION)-($host_arch).tar.gz" | tar -xz -C rootfs

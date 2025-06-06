@@ -46,10 +46,10 @@ export def generate [config: record] {
 
     let macos_commands = if ($all_targets.macos | is-not-empty) {
         mut host_arch = (uname | get machine)
-		if $host_arch == "arm64" {
-			# Needed if host system is macOS
-			$host_arch = "aarch64"
-		}
+        if $host_arch == "arm64" {
+            # Needed if host system is macOS
+            $host_arch = "aarch64"
+        }
 
         let rust_objcopy = $"/usr/local/rustup/toolchains/($config.rust_version)-($host_arch)-unknown-linux-musl/lib/rustlib/($host_arch)-unknown-linux-musl/bin/rust-objcopy"
 
