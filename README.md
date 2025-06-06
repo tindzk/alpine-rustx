@@ -62,7 +62,7 @@ mkdir sample-project && cd sample-project
 cp $RUSTX_PATH/config.nuon.sample rustx.nuon
 ```
 
-Edit `rustx.nuon` to match your requirements.
+Edit `rustx.nuon` to match your requirements. Please note that Linux targets currently support only the `musl` variant.
 
 Build all toolchains and generate the `Dockerfile`:
 
