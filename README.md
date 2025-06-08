@@ -31,7 +31,7 @@ The generated Docker image allows you to compile your Rust project for any of th
 
 ## Requirements
 - Docker
-- [Bubblewrap](https://github.com/containers/bubblewrap) (optional)
+- [Bubblewrap](https://github.com/containers/bubblewrap) (optional, Linux only)
 - A minimum of 15 GB free disk space is recommended
 
 ## Installation
@@ -62,7 +62,7 @@ mkdir sample-project && cd sample-project
 cp $RUSTX_PATH/config.nuon.sample rustx.nuon
 ```
 
-Edit `rustx.nuon` to match your requirements.
+Edit `rustx.nuon` to match your requirements. Please note that Linux targets currently support only the `musl` variant.
 
 Build all toolchains and generate the `Dockerfile`:
 
