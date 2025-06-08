@@ -86,6 +86,9 @@ Validate that the image works correctly by building the [Ring](https://docs.rs/c
 rustx test rustx.nuon myproject:latest
 ```
 
+## Comparison
+An alternative worth considering is [cross](https://github.com/cross-rs/cross). While alpine-rustx was designed to produce custom Docker images for CI environments, cross is a more general-purpose cross-compilation tool. In addition to building, it can run tests via emulation and its Linux targets support both musl and glibc.
+
 ## Credits
 alpine-rustx relies on these projects:
 - [musl-cross-make](https://github.com/richfelker/musl-cross-make/)
